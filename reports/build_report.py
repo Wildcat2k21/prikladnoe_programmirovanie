@@ -109,6 +109,8 @@ pre {
 .tp-right { margin: 40mm 0 0 82mm; text-align: left; font-size: 12.5pt; }
 .tp-right p { margin: 0 0 5pt; }
 .tp-bottom { position: absolute; bottom: 0; width: 100%; font-size: 13pt; }
+.tp-repo { font-size: 11pt; margin-bottom: 10pt; }
+.tp-repo a { color: #1a4f9c; }
 
 /* Оглавление */
 .toc { page-break-after: always; }
