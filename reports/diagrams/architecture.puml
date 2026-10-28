@@ -1,0 +1,38 @@
+@startuml
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam rectangle {
+  BorderColor #444444
+}
+top to bottom direction
+
+rectangle "**Среда — MuJoCo** (quadrotor_2d.xml)\nmj_step, шаг физики 1 мс (1000 Гц); состояние x, z, θ, ẋ, ż, θ̇" as ENV #EEEEEE
+
+rectangle "**Слой 1. Perception** — perception.py" as P #DDEBF7 {
+  rectangle "IMU, 1000 Гц\nθ, θ̇ + шум" as IMU #FFFFFF
+  rectangle "Высотомер, 1000 Гц\nz + шум; ż — фильтр.\nпроизводная z" as ALT #FFFFFF
+  rectangle "Камера, 30 fps\nx, ẋ + шум\n(sample-and-hold)" as CAM #FFFFFF
+  rectangle "DelayedSensor — задержка измерений на N шагов" as DEL #FFFFFF
+}
+
+rectangle "**Fail-Operational** — fail_operational.py\nдетектор: дисперсия z за 50 мс > 1e−3 м²  ⇒  отказ\nрезерв: z, ż по модели  z̈ = T·cosθ / m − g" as FO #FCE4D6
+
+rectangle "**Слой 2. Planning** — planning.py\nкаскадный PD: z → T,  x → θ*,  θ → τ;  микшер → F_л, F_п\n(WaypointPlanner — жёсткая траектория)" as PL #E2EFDA
+
+rectangle "**Слой 3. Control** — control.py\nControlLoop: обновление команды с частотой 20…1000 Гц,\nудержание между обновлениями (ZOH), ограничение 0…10 Н" as CTRL #FFF2CC
+
+ENV --> IMU
+ENV --> ALT
+ENV --> CAM
+IMU --> DEL
+ALT --> DEL
+CAM --> DEL
+DEL --> FO : наблюдение
+FO --> PL : z, ż — измерение или предсказание
+PL --> CTRL : F_л, F_п
+CTRL -[norank]-> ENV : data.ctrl (тяги моторов)
+@enduml

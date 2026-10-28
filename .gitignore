@@ -1,0 +1,17 @@
+# Виртуальное окружение Python
+.venv/
+venv/
+
+# Кэш Python и Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# Локальный список установленных для лабораторной зависимостей (не для репозитория)
+installed_deps.md
+
+# Логи
+*.log

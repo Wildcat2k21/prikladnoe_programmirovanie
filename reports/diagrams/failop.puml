@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 12
+skinparam shadowing false
+hide empty description
+state "Норма" as N #E2EFDA : в Planning идёт z высотомера\nпредиктор корректируется по z
+state "Отказ высотомера" as F #FCE4D6 : в Planning идут z, ż предиктора\nкоррекция по z выключена
+[*] --> N
+N --> F : var(z) за 50 мс > 1e−3 м²
+F --> N : var(z) за 50 мс ≤ 1e−3 м²
+@enduml

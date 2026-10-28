@@ -1,0 +1,22 @@
+@startuml
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam roundCorner 8
+left to right direction
+
+rectangle "z* = 1.5 м" as ZT #FFFFFF
+rectangle "**PD по высоте**\nKp=25, Kd=10\nT = m(g + a_z)/cosθ" as PDZ #E2EFDA
+rectangle "x* = 0 м" as XT #FFFFFF
+rectangle "**PD по x**\nKp=1, Kd=1.5\nθ* ∈ [−0.4; 0.4] рад" as PDX #E2EFDA
+rectangle "**PD по углу**\nKp=1600, Kd=56\nτ = I(Kp·Δθ − Kd·θ̇)" as PDT #E2EFDA
+rectangle "**Микшер**\nF_л = T/2 + τ/(2l)\nF_п = T/2 − τ/(2l)" as MIX #FFF2CC
+rectangle "**Квадрокоптер**\nm = 0.613 кг\nI = 0.0064 кг·м²\nl = 0.15 м" as Q #EEEEEE
+
+ZT --> PDZ
+PDZ --> MIX : T
+XT --> PDX
+PDX --> PDT : θ*
+PDT --> MIX : τ
+MIX --> Q : F_л, F_п
+@enduml
